@@ -1,0 +1,53 @@
+{
+  "filename":"bg.bmp",
+  "width":1920,
+  "height":1080,
+  "num_images": 8,
+  "rgb": "bgr",
+  "bits_per_color": 4,
+  "brightness_shift": 4,
+  "pixels_per_unit": 120,
+  "zoom": 0.1,
+  "images": [
+    {
+      "side_size": 2,
+      "bg_x": 0,
+      "bg_y": 780
+    },
+    {
+      "side_size": 2,
+      "bg_x": 240,
+      "bg_y": 780
+    },
+    {
+      "side_size": 2,
+      "bg_x": 0,
+      "bg_y": 540
+    },
+    {
+      "side_size": 2,
+      "bg_x": 240,
+      "bg_y": 540
+    },
+    {
+      "side_size": 4,
+      "bg_x": 480,
+      "bg_y": 540
+    },
+    {
+      "side_size": 4,
+      "bg_x": 0,
+      "bg_y": 60
+    },
+    {
+      "side_size": 4,
+      "bg_x": 480,
+      "bg_y": 60
+    },
+    {
+      "side_size": 8,
+      "bg_x": 960,
+      "bg_y": 60
+    }
+  ]
+}

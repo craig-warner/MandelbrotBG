@@ -1,0 +1,12 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+<file alias="fileopen.png">images/fileopen.png</file>
+<file alias="filequit.png">images/filequit.png</file>
+<file alias="back.png">images/back.png</file>
+<file alias="home.png">images/home.png</file>
+<file alias="icon.png">images/icon.png</file>
+
+<file>help/filemenu.html</file>
+<file>help/index.html</file>
+</qresource>
+</RCC>
