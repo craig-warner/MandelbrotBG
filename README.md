@@ -5,7 +5,7 @@ Mandelbrot Background Maker
 #Requirements
 
 Python3
-PyQT4
+PyQT5
 
 # Invoking Program
 

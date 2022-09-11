@@ -9,8 +9,9 @@ author: Craig Warner
 import os
 import platform
 import sys
+import argparse
 import random
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 import json
 from pprint import pprint
 import helpform
@@ -164,7 +165,7 @@ class Bitmap():
 #
 # Functions
 #
-class MandelbrotBackground(QtGui.QMainWindow):
+class MandelbrotBackground(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(MandelbrotBackground, self).__init__()
@@ -194,11 +195,11 @@ class MandelbrotBackground(QtGui.QMainWindow):
         self.fileMenu = self.menuBar().addMenu("&File")
         self.fileMenuActions = (fileOpenAction,None,fileQuitAction)
         #self.fileQuitActions(self.fileMenu, (fileQuitAction, fileQuitAction))
-        self.connect(self.fileMenu, QtCore.SIGNAL("aboutToShow()"),
-                     self.updateFileMenu)
+        #self.connect(self.fileMenu, QtCore.SIGNAL("aboutToShow()"),
+        #             self.updateFileMenu)
 
         helpAboutAction = self.createAction(
-            "&About PUMA Performace Monitor", self.helpAbout)
+            "&About Mandelbrot Background Drawer", self.helpAbout)
         helpHelpAction = self.createAction(
             "&Help", self.helpHelp, QtGui.QKeySequence.HelpContents)
         helpMenu = self.menuBar().addMenu("&Help")
@@ -213,7 +214,7 @@ class MandelbrotBackground(QtGui.QMainWindow):
         self.recentFiles = settings.value("RecentFiles") or []
 
         self.updateFileMenu()
-        self.listWidget = QtGui.QListWidget()
+        self.listWidget = QtWidgets.QListWidget()
 
         self.BoardWidth = 1024
         self.BoardHeight = 768
@@ -226,7 +227,7 @@ class MandelbrotBackground(QtGui.QMainWindow):
 
     def createAction(self, text, slot=None, shortcut=None, icon=None, tip=None,
                      checkable=False, signal="triggered()"):
-        action = QtGui.QAction(text, self)
+        action = QtWidgets.QAction(text, self)
         if icon is not None:
             action.setIcon(QtGui.QIcon("images/{}.png".format(icon)))
         if shortcut is not None:
@@ -234,8 +235,8 @@ class MandelbrotBackground(QtGui.QMainWindow):
         if tip is not None:
             action.setToolTip(tip)
             action.setStatusTip(tip)
-        if slot is not None:
-            self.connect(action, QtCore.SIGNAL(signal), slot)
+        #if slot is not None:
+        #    self.connect(action, QtCore.SIGNAL(signal), slot)
         if checkable:
             action.setCheckable(True)
         return action
@@ -276,7 +277,7 @@ class MandelbrotBackground(QtGui.QMainWindow):
     def loadInitialFile(self):
         settings = QtCore.QSettings()
         fname = settings.value("LastFile")
-        if fname and StCore.QFile.exists(fname):
+        if fname and QtCore.QFile.exists(fname):
             self.loadFile(fname)
 
     def updateFileMenu(self):
@@ -308,11 +309,11 @@ class MandelbrotBackground(QtGui.QMainWindow):
 
     def helpAbout(self):
         QtGui.QMessageBox.about(self, "Mandelbrot Background Drawer",
-          """<b>Mandelbrot Backgrouund Drawer</b> v{0.1}
-      <p>Copyright &copy; 2020 Craig Warner
+          """<b>Mandelbrot Background Drawer</b> v{1.0}
+      <p>Copyright &copy; 2022 Craig Warner
       All rights reserved.
       <p>This application can be used to display
-      PUMA core untilization.  </p>""")
+      Create Mandelbrot backgrounds.  </p>""")
 
     def helpHelp(self):
         form = helpform.HelpForm("help/index.html", self)
@@ -322,7 +323,7 @@ class MandelbrotBackground(QtGui.QMainWindow):
         self.settings_json = json.load(open(fname))
 
     def initUI(self):
-        self.wid = QtGui.QWidget(self)
+        self.wid = QtWidgets.QWidget(self)
         self.setCentralWidget(self.wid)
         self.setGeometry(0,100,1024,768)
         self.setWindowTitle('Mandelbrot Background Drawer')
@@ -349,20 +350,20 @@ class MandelbrotBackground(QtGui.QMainWindow):
 
 
     def addBody(self):
-        hbox1 = QtGui.QHBoxLayout()
+        hbox1 = QtWidgets.QHBoxLayout()
         hbox1.setGeometry(QtCore.QRect(0, 0, 800, 400))
-        hbox2 = QtGui.QHBoxLayout()
+        hbox2 = QtWidgets.QHBoxLayout()
         hbox2.setGeometry(QtCore.QRect(0, 0, 200, 200))
-        vbox = QtGui.QVBoxLayout()
+        vbox = QtWidgets.QVBoxLayout()
 
         # Positioner
         self.positionerWidget = PositionerWidget(self.bg_arrangement["zoom"])
 
-        title= QtGui.QLabel()
+        title= QtWidgets.QLabel()
         title.setText("Positioner")
         title.setFont(QtGui.QFont('SansSerif', 10))
 
-        scroll = QtGui.QScrollArea()
+        scroll = QtWidgets.QScrollArea()
         scroll.setGeometry(QtCore.QRect(0, 0, 400, 400))
         scroll.setWidget(self.positionerWidget)
         #scroll.setWidgetResizable(True)
@@ -370,7 +371,7 @@ class MandelbrotBackground(QtGui.QMainWindow):
         scroll.setFixedHeight(425)
         scroll.ensureVisible(0,0,100,100)
 
-        vbox_positioner = QtGui.QVBoxLayout()
+        vbox_positioner = QtWidgets.QVBoxLayout()
         vbox_positioner.setGeometry(QtCore.QRect(0, 0, 400, 400))
         vbox_positioner.addWidget(title)
         vbox_positioner.addWidget(scroll)
@@ -379,24 +380,24 @@ class MandelbrotBackground(QtGui.QMainWindow):
         hbox1.addLayout(vbox_positioner)
 
         # Settings
-        self.settings_vbox = QtGui.QVBoxLayout()
+        self.settings_vbox = QtWidgets.QVBoxLayout()
         self.settings_vbox.setGeometry(QtCore.QRect(0, 0, 400, 400))
 
-        title= QtGui.QLabel()
+        title= QtWidgets.QLabel()
         title.setText("Zoom Settings")
         title.setFont(QtGui.QFont('SansSerif', 10))
 
         self.pathWidget = PathWidget(self.bg_arrangement["num_images"])
 
-        self.scroll2 = QtGui.QScrollArea()
+        self.scroll2 = QtWidgets.QScrollArea()
         self.scroll2.setGeometry(QtCore.QRect(0, 0, 400, 300))
         self.scroll2.setWidget(self.pathWidget)
         self.scroll2.ensureVisible(0,0,100,100)
 
-        reset_path_button = QtGui.QPushButton('Reset Path', self)
+        reset_path_button = QtWidgets.QPushButton('Reset Path', self)
         reset_path_button.setCheckable(True)
         reset_path_button.clicked[bool].connect(self.resetPath)
-        set_path_button = QtGui.QPushButton('Set Path', self)
+        set_path_button = QtWidgets.QPushButton('Set Path', self)
         set_path_button.setCheckable(True)
         set_path_button.clicked[bool].connect(self.setPath)
 
@@ -412,11 +413,11 @@ class MandelbrotBackground(QtGui.QMainWindow):
             self.bg_arrangement["height"],
             self.bg_arrangement["bits_per_color"])
 
-        title= QtGui.QLabel()
+        title= QtWidgets.QLabel()
         title.setText("Preview")
         title.setFont(QtGui.QFont('SansSerif', 10))
 
-        scroll = QtGui.QScrollArea()
+        scroll = QtWidgets.QScrollArea()
         #scroll.setGeometry(QtCore.QRect(0, 0, 400, 400))
         scroll.setWidget(self.bg)
         #scroll.setWidgetResizable(True)
@@ -424,10 +425,10 @@ class MandelbrotBackground(QtGui.QMainWindow):
         scroll.setFixedHeight(200)
         scroll.ensureVisible(0,0,100,100)
 
-        vboxPreview = QtGui.QVBoxLayout()
+        vboxPreview = QtWidgets.QVBoxLayout()
         vboxPreview.addWidget(title)
 
-        draw_button = QtGui.QPushButton('Draw', self)
+        draw_button = QtWidgets.QPushButton('Draw', self)
         draw_button.setCheckable(True)
         draw_button.clicked[bool].connect(self.drawBackground)
 
@@ -460,9 +461,9 @@ class MandelbrotBackground(QtGui.QMainWindow):
             self.setWindowTitle(
                 "PUMA Performace Viewer - {}[*]".format(os.path.basename(str(self.filename))))
         elif not self.image.isNull():
-            self.setWindowTitle("PUMA Performance Viewer - Unnamed[*]")
+            self.setWindowTitle("Mandelbrot Background - Unnamed[*]")
         else:
-            self.setWindowTitle("PUMA Performance Viewer [*]")
+            self.setWindowTitle("Mandelbrot Background [*]")
         self.grid.reDraw()
 
     def closeEvent(self, event):
@@ -522,7 +523,7 @@ class MandelbrotBackground(QtGui.QMainWindow):
         self.pathWidget.repaint()
         self.repaint()
 
-class PositionerWidget(QtGui.QWidget):
+class PositionerWidget(QtWidgets.QWidget):
     def __init__(self,zoom):
         super(PositionerWidget, self).__init__()
         self.MyMandelCalc = MandelCalc()
@@ -609,7 +610,7 @@ class PositionerWidget(QtGui.QWidget):
         return(self.real_len)
 
 
-class PathWidget(QtGui.QWidget):
+class PathWidget(QtWidgets.QWidget):
     def __init__(self,num_images):
         super(PathWidget, self).__init__()
         self.num_images = num_images
@@ -676,7 +677,7 @@ class PathWidget(QtGui.QWidget):
     def getMaxY(self,i):
         return(self.maxy[i])
 
-class BGWidget(QtGui.QWidget):
+class BGWidget(QtWidgets.QWidget):
     def __init__(self,width,height,bits_per_color):
         super(BGWidget, self).__init__()
         self.width = width
@@ -766,7 +767,9 @@ class BGWidget(QtGui.QWidget):
 
 def main():
 
-    app = QtGui.QApplication([])
+    parser = argparse.ArgumentParser(description='Draw Mandoelbrot Banckgrounds')
+    args = parser.parse_args()
+    app = QtWidgets.QApplication([])
     mBack = MandelbrotBackground()
     sys.exit(app.exec_())
 
